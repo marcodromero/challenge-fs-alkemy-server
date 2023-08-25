@@ -1,0 +1,25 @@
+{
+  "name": "challenge-full-stack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Marco Romero <marcod.romero@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "express-validator": "^6.15.0",
+    "google-auth-library": "^8.9.0",
+    "jsonwebtoken": "^9.0.0",
+    "mysql2": "^3.2.0",
+    "nodemon": "^3.0.1",
+    "sequelize": "^6.29.3"
+  }
+}
