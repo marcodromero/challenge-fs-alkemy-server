@@ -10,7 +10,6 @@ const getOperations = async (req, res) => {
 
     if (categoryId) {
       query = { ...query, categoryId };
-      console.log(query);
     }
 
     const operations = await OperationService.getOperations(query);

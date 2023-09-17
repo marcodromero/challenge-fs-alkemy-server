@@ -3,7 +3,7 @@ const Operation = require("../models/operation");
 const sequelize = require("sequelize");
 
 const getOperations = async (query) => {
-  return await Operation.findAll({
+  const operations = await Operation.findAll({
     include: [
       {
         model: Category,
@@ -25,15 +25,18 @@ const getOperations = async (query) => {
       [sequelize.fn("date_format", sequelize.col("date"), "%d-%m-%Y"), "date"],
     ],
   });
+  return operations;
 };
 
 const getOperation = async ({ userId, operationId }) => {
-  return await Operation.findOne({
+  const operation = await Operation.findOne({
     where: {
       id: operationId,
       userId,
     },
   });
+
+  return operation;
 };
 
 const createOperation = async ({
@@ -55,13 +58,15 @@ const createOperation = async ({
 };
 
 const updateOperation = async ({ userId, operationId, data }) => {
-  return await Operation.update(data, {
+  const operationUpdated = await Operation.update(data, {
     where: {
       id: operationId,
       userId,
     },
     individualHooks: true,
   });
+
+  return operationUpdated;
 };
 
 const deleteOperation = async (operationId) => {

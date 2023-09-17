@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const db = require("../database/db-config");
 const cors = require("cors");
 const { runSeeders } = require("../seeders");
