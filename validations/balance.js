@@ -1,5 +1,5 @@
 const { validateJWT } = require("../middlewares/validate-JWT");
 
-const getBalanceValidation = [validateJWT];
+const getAllValidation = [validateJWT];
 
-module.exports = { getBalanceValidation };
+module.exports = { getAllValidation };

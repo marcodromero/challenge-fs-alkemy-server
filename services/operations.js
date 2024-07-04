@@ -1,8 +1,10 @@
-const Category = require("../models/category");
-const Operation = require("../models/operation");
 const sequelize = require("sequelize");
+const Category= require("../models/category");
+const Operation = require("../models/operation");
 
-const getOperations = async (query) => {
+class OperationsService{
+  
+ getOperations = async (query) => {
   const operations = await Operation.findAll({
     include: [
       {
@@ -28,7 +30,7 @@ const getOperations = async (query) => {
   return operations;
 };
 
-const getOperation = async ({ userId, operationId }) => {
+getOperation = async ({ userId, operationId }) => {
   const operation = await Operation.findOne({
     where: {
       id: operationId,
@@ -39,7 +41,7 @@ const getOperation = async ({ userId, operationId }) => {
   return operation;
 };
 
-const createOperation = async ({
+createOperation = async ({
   type,
   concept,
   amount,
@@ -57,7 +59,7 @@ const createOperation = async ({
   });
 };
 
-const updateOperation = async ({ userId, operationId, data }) => {
+ updateOperation = async ({ userId, operationId, data }) => {
   const operationUpdated = await Operation.update(data, {
     where: {
       id: operationId,
@@ -69,16 +71,12 @@ const updateOperation = async ({ userId, operationId, data }) => {
   return operationUpdated;
 };
 
-const deleteOperation = async (operationId) => {
+deleteOperation = async (operationId) => {
   const operation = await Operation.findByPk(operationId);
   operation.destroy();
   return operation;
 };
 
-module.exports = {
-  getOperation,
-  getOperations,
-  createOperation,
-  updateOperation,
-  deleteOperation,
-};
+}
+
+module.exports = OperationsService;

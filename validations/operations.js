@@ -1,12 +1,11 @@
-const { operationExist } = require("../helpers/db-validations");
 const { validateJWT } = require("../middlewares/validate-JWT");
 const { validateFields } = require("../middlewares/validate-fields");
-const { body, param } = require("express-validator");
-const { validateOperationId } = require("../middlewares/validate-operationId");
+const { body } = require("express-validator");
 
-const createOperationValidation = [
+const createValidation = [
   validateJWT,
-  body("amount", "El monto no es valido.").isDecimal().notEmpty(),
+  body("amount", "El monto no debe quedar vacio.").notEmpty(),
+   body("amount", "El monto no tiene un valor valido.").isDecimal(),
   body("date", "La fecha no es valida").isDate(),
   body("concept", "El concepto no es valido.").notEmpty().isLength({ max: 50 }),
   body("type", "El tipo no es valido.").isIn(["egreso", "ingreso"]),
@@ -14,29 +13,27 @@ const createOperationValidation = [
   validateFields,
 ];
 
-const updateOperationValidation = [
+const updateValidation = [
   validateJWT,
-  validateOperationId,
   body("amount", "El monto no es valido.").isDecimal(),
   body("date", "La fecha no es valida").isDate(),
   body("concept", "El concepto no es valido.").isLength({ max: 50, min: 1 }),
   validateFields,
 ];
 
-const deleteOperationValidation = [
+const deleteValidation = [
   validateJWT,
-  validateOperationId,
   validateFields,
 ];
 
-const getOperationsValidation = [validateJWT];
+const getAllValidation = [validateJWT];
 
-const getOperationValidation = [validateJWT];
+const getByIdValidation = [validateJWT];
 
 module.exports = {
-  createOperationValidation,
-  updateOperationValidation,
-  deleteOperationValidation,
-  getOperationValidation,
-  getOperationsValidation,
+  createValidation,
+  updateValidation,
+  deleteValidation,
+  getByIdValidation,
+  getAllValidation,
 };

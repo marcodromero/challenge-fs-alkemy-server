@@ -1,9 +1,5 @@
-const OperationService = require("../services/operations");
-const BalanceService = require("../services/balance");
-const CategoryService = require("../services/categories");
-
 module.exports = {
-  OperationService,
-  BalanceService,
-  CategoryService,
+  OperationsService: require("../services/operations"),
+  BalanceService: require("../services/balance"),
+  CategoriesService: require("../services/categories"),
 };

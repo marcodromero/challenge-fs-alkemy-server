@@ -1,8 +1,8 @@
 const express = require("express");
-require("dotenv").config();
 const db = require("../database/db-config");
 const cors = require("cors");
 const { runSeeders } = require("../seeders");
+const resError = require("../helpers/resError");
 
 class Server {
   constructor() {
@@ -11,13 +11,14 @@ class Server {
     this.paths = {
       operations: "/operations",
       balance: "/balance",
-      auth: "/auth",
+      login: "/login",
       categories: "/categories",
     };
 
     this.dbConnection();
     this.middlewares();
     this.routes();
+    this.errors();
   }
 
   async dbConnection() {
@@ -40,8 +41,15 @@ class Server {
   routes() {
     this.app.use(this.paths.operations, require("../routes/operations"));
     this.app.use(this.paths.balance, require("../routes/balance"));
-    this.app.use(this.paths.auth, require("../routes/auth"));
+    this.app.use(this.paths.login, require("../routes/login"));
     this.app.use(this.paths.categories, require("../routes/categories"));
+  }
+
+  errors(){
+    this.app.use((err, req, res, next)=>{
+      console.log("datos",err,"fin datos");
+      resError(res, err.statusCode, err.message);
+    });
   }
 
   listen() {

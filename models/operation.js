@@ -1,7 +1,6 @@
 const { DataTypes } = require("sequelize");
 const db = require("../database/db-config");
-const Balance = require("./balance");
-const Category = require("./category");
+const { createBalance } = require("../helpers/createBalance");
 
 const Operation = db.define("Operation", {
   id: {
@@ -29,27 +28,13 @@ const Operation = db.define("Operation", {
     type: DataTypes.DATE,
     required: true,
     allowNull: false,
+    defaultValue: new Date()
   },
 });
 
-const createBalance = async (operation) => {
-  const { userId } = operation;
-
-  let amount = await Operation.sum("amount", {
-    where: {
-      userId,
-    },
-  });
-
-  const date = new Date();
-
-  await Balance.create({ amount, userId, date });
-};
-
+//Triggers
 Operation.afterCreate(createBalance);
-
 Operation.afterDestroy(createBalance);
-
 Operation.afterUpdate((operation) => {
   if (operation.changed("amount")) {
     createBalance(operation);

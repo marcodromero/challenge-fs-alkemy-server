@@ -6,7 +6,6 @@ const generateJWT = (id) => {
 
     jwt.sign(payload, process.env.JWT_SECRET, (err, token) => {
       if (err) {
-        console.log(err);
         reject("Failed to generate token");
       } else {
         resolve(token);

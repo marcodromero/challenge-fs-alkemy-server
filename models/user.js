@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const Sequelize = require('sequelize');
 const db = require('../database/db-config');
 const Balance = require('./balance');
 const Operation = require('./operation');
@@ -10,15 +11,15 @@ const User = db.define('User', {
         primaryKey: true,
         autoIncrement: true 
     },
-    name:{
-        type: DataTypes.STRING,
-    },
     email:{
         type: DataTypes.STRING,
-        required: true
+        required: true,
+        allowNull: false
     },
-    picture:{
-        type: DataTypes.STRING
+    password:{
+        type: DataTypes.STRING,
+        required: true,
+        allowNull: false
     },
     state:{
         type: DataTypes.BOOLEAN,

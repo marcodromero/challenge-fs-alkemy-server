@@ -1,27 +1,12 @@
 const { Router } = require("express");
-
-const {
-  createOperation,
-  getOperations,
-  updateOperation,
-  deleteOperation,
-  getOperation,
-} = require("../controllers/operations");
-
-const {
-  createOperationValidation,
-  updateOperationValidation,
-  deleteOperationValidation,
-  getOperationsValidation,
-  getOperationValidation,
-} = require("../validations/operations");
+const { operationsController } = require("../controllers");
+const { operationsValidations } = require("../validations");
 
 const router = Router();
-
-router.get("/", getOperationsValidation, getOperations);
-router.get("/:id", getOperationValidation, getOperation);
-router.post("/", createOperationValidation, createOperation);
-router.put("/:id", updateOperationValidation, updateOperation);
-router.delete("/:id", deleteOperationValidation, deleteOperation);
+router.get("/", operationsValidations.getAllValidation, operationsController.getAllOperations);
+router.get("/:id", operationsValidations.getByIdValidation, operationsController.getOperationById);
+router.post("/", operationsValidations.createValidation, operationsController.createOperation);
+router.put("/:id", operationsValidations.updateValidation, operationsController.updateOperation);
+router.delete("/:id", operationsValidations.deleteValidation, operationsController.deleteOperation);
 
 module.exports = router;

@@ -5,4 +5,4 @@ const getVerifiedAmount = ({ type, amount }) => {
   return amount;
 };
 
-module.exports = { getVerifiedAmount };
+module.exports =  getVerifiedAmount ;

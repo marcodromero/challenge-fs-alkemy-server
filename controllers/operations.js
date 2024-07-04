@@ -1,110 +1,74 @@
-const Operation = require("../models/operation");
-const { OperationService } = require("../services");
-const { getVerifiedAmount } = require("../helpers/getVerifiedAmount ");
+const { OperationsService } = require("../services");
+const { OperationError } = require("../helpers/errors");
+const { catchedAsync, response, getVerifiedAmount} = require("../helpers");
+const operationsService = new OperationsService;
 
-const getOperations = async (req, res) => {
-  try {
+const getAllOperations = async (req, res) => {
     const userId = req.user.id;
     const { categoryId } = req.query;
-    let query = { userId };
-
-    if (categoryId) {
-      query = { ...query, categoryId };
-    }
-
-    const operations = await OperationService.getOperations(query);
-
-    res.json(operations);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
+    const operations = categoryId
+    ? await operationsService.getOperations({userId, categoryId})
+    : await operationsService.getOperations({userId})
+    response(res, 200, operations);
 };
 
-const getOperation = async (req, res) => {
-  try {
+const getOperationById = async (req, res) => {
     const userId = req.user.id;
     const operationId = req.params.id;
-
-    const operation = await OperationService.getOperation({
+    const operation = await operationsService.getOperation({
       userId,
       operationId,
     });
-
-    res.json(operation);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
+    if(!operation) throw new OperationError("ID invalido");
+    response(res, 200, operation);
 };
 
 const createOperation = async (req, res) => {
-  try {
     const userId = req.user.id;
+    console.log(req.body);
     let { type, amount, ...data } = req.body;
     amount = getVerifiedAmount({ type, amount });
-
-    const operationCreated = await OperationService.createOperation({
+    const operation = await operationsService.createOperation({
       ...data,
       userId,
       amount,
       type,
     });
-
-    res.status(201).json(operationCreated);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
+    response(res, 201, operation);
 };
 
 const updateOperation = async (req, res) => {
-  try {
     const userId = req.user.id;
     const operationId = req.params.id;
     let { type, amount, ...data } = req.body;
-
-    const { typeOperation } = await OperationService.getOperation({
+    const { typeOperation } = await operationsService.getOperation({
       userId,
       operationId,
     });
-
     const verifiedAmount = getVerifiedAmount({ type: typeOperation, amount });
-
     data = { ...data, amount: verifiedAmount };
-
-    const updatedOperation = await OperationService.updateOperation({
+    const operation = await operationsService.updateOperation({
       userId,
       operationId,
       data,
     });
-
-    res.status(200).json(updatedOperation);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
+    if(!operation) throw new OperationError("ID invalido");
+    response(res, 200, operation);
 };
 
 const deleteOperation = async (req, res) => {
-  try {
     const operationId = req.params.id;
-
-    const deletedOperation = await OperationService.deleteOperation(
+    const operation = await operationsService.deleteOperation(
       operationId
     );
-
-    res.status(200).json(deletedOperation);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
+    if(!operation) throw new OperationError("ID invalido");
+    response(res, 200, operation);
 };
 
 module.exports = {
-  getOperation,
-  getOperations,
-  updateOperation,
-  createOperation,
-  deleteOperation,
+  getOperationById: catchedAsync(getOperationById),
+  getAllOperations: catchedAsync(getAllOperations),
+  updateOperation: catchedAsync(updateOperation),
+  createOperation: catchedAsync(createOperation),
+  deleteOperation: catchedAsync(deleteOperation)
 };

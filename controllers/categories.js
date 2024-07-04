@@ -1,13 +1,10 @@
-const { CategoryService } = require("../services");
+const { catchedAsync, response} = require("../helpers");
+const {CategoriesService} = require("../services");
+const categoriesService = new CategoriesService();
 
 const getCategories = async (req, res) => {
-  try {
-    const categories = await CategoryService.getCategories();
-    res.json(categories);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
+    const categories = await categoriesService.getCategories();
+    response(res, 200, categories);
 };
 
-module.exports = { getCategories };
+module.exports = { getCategories: catchedAsync(getCategories) };

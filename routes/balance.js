@@ -1,9 +1,8 @@
 const { Router } = require("express");
-const { getBalance } = require("../controllers/balance");
-const { getBalanceValidation } = require("../validations/balance");
+const { balanceController } = require("../controllers");
+const { balanceValidation } = require("../validations");
 
 const router = Router();
-
-router.get("/", getBalanceValidation, getBalance);
+router.get("/", balanceValidation.getAllValidation, balanceController.getAllBalance);
 
 module.exports = router;

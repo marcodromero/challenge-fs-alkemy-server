@@ -1,10 +1,12 @@
 const Category = require("../models/category");
 
-const getCategories = async () => {
-  return await Category.findAll({
-    order: [["name", "ASC"]],
-    attributes: ["id", "name"],
-  });
-};
-
-module.exports = { getCategories };
+class CategoriesService {
+  getCategories = async () => {
+    const categories = await Category.findAll({
+      order: [["name", "ASC"]],
+      attributes: ["id", "name"],
+    });
+    return categories;
+  };
+}
+module.exports = CategoriesService;

@@ -1,9 +1,19 @@
 const { validateFields } = require("../middlewares/validate-fields");
 const { body } = require("express-validator");
 
-const googleSignInValidator = [
-  body("id_token", "id_token is required").not().isEmpty(),
+const registerValidator = [
+  body("email", "El campo email no debe quedar vacio.").not().isEmpty(),
+  body("email", "El email proporcionado no tiene un formato valido.").isEmail(),
+  body("password", "El campo contraseña no debe quedar vacio.").not().isEmpty(),
+  body("password", "La contraseña debe contener al menos 8 caracteres").isLength({ min: 8 }),
   validateFields,
 ];
 
-module.exports = { googleSignInValidator };
+const signInValidator = [
+  body("email", "El campo email no debe quedar vacio.").not().isEmpty(),
+  body("email", "El email proporcionado no tiene un formato valido.").isEmail(),
+  body("password", "El campo contraseña no debe estar vacio.").not().isEmpty(),
+  validateFields,
+];
+
+module.exports = { registerValidator, signInValidator };

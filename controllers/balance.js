@@ -1,25 +1,15 @@
-const Balance = require("../models/balance");
-const sequelize = require("sequelize");
+const { BalanceService } = require("../services");
+const { catchedAsync, response} = require("../helpers");
+const balanceService = new BalanceService();
 
-const getBalance = async (req, res) => {
+const getAllBalance = async (req, res) => {
   const { id } = req.user;
-
-  const balance = await Balance.findAll({
-    where: {
-      userId: id,
-    },
-    attributes: [
-      "id",
-      "amount",
-      [sequelize.fn("date_format", sequelize.col("date"), "%d-%m-%Y"), "date"],
-    ],
-    limit: 10,
-    order: [["id", "DESC"]],
-  });
-
-  res.json(balance);
+  const balance = await balanceService.getAllBalance(id);
+  response(res, 200, balance);
 };
 
 module.exports = {
-  getBalance,
+  getAllBalance: catchedAsync(getAllBalance),
 };
+
+
